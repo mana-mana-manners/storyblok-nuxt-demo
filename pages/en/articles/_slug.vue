@@ -5,20 +5,16 @@
 </template>
 
 <script>
-import Article from '~/components/Article.vue'
-
 export default {
-  components: {
-    Article,
-  },
   asyncData(context) {
     // Load the JSON from the API
     const version =
       context.query._storyblok || context.isDev ? 'draft' : 'published'
 
     return context.app.$storyapi
-      .get(`cdn/stories/en/articles/${context.params.slug}`, {
+      .get(`cdn/stories/articles/${context.params.slug}`, {
         version,
+        language: 'en',
       })
       .then((res) => {
         return res.data

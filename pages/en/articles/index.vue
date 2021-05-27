@@ -1,7 +1,7 @@
 <template>
   <section>
     <h2 class="py-10 text-center font-bold text-4xl">Articles Overview</h2>
-    {{ articles }}
+    <!-- {{ articles }} -->
     <ul class="flex py-6 mb-6">
       <li
         v-for="article in stories"
@@ -11,7 +11,7 @@
       >
         <article-teaser
           v-if="article.content"
-          :article-link="article.full_slug"
+          :article-link="'/' + article.full_slug"
           :article-content="article.content"
         />
       </li>
@@ -24,8 +24,9 @@ export default {
   asyncData(context) {
     return context.app.$storyapi
       .get('cdn/stories', {
-        starts_with: 'en/articles/',
+        starts_with: 'articles/',
         version: 'draft',
+        language: 'en',
       })
       .then((res) => {
         return res.data

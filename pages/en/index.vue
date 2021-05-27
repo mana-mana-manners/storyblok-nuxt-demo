@@ -18,8 +18,9 @@ export default {
 
     // Load the JSON from the API - loadig the home content (index page)
     return context.app.$storyapi
-      .get('cdn/stories/en/home', {
+      .get('cdn/stories/home', {
         version: 'draft',
+        language: 'en',
       })
       .then((res) => {
         return res.data
@@ -49,8 +50,9 @@ export default {
     // Loading reference data - Articles in our case
     if (context.store.state.articles.loaded !== '1') {
       const articlesRefRes = await context.app.$storyapi.get(`cdn/stories/`, {
-        starts_with: 'en/articles/',
+        starts_with: 'articles/',
         version: 'draft',
+        language: 'en',
       })
       context.store.commit('articles/setArticles', articlesRefRes.data.stories)
       context.store.commit('articles/setLoaded', '1')
