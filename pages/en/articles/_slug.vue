@@ -1,25 +1,24 @@
 <template>
   <section>
-    <component
-      :is="story.content.component"
-      v-if="story.content.component"
-      :key="story.content._uid"
-      :blok="story.content"
-    />
+    <Article :blok="story.content" />
   </section>
 </template>
 
 <script>
-export default {
-  asyncData(context) {
-    // // This what would we do in real project
-    // const version = context.query._storyblok || context.isDev ? 'draft' : 'published'
-    // const fullSlug = (context.route.path == '/' || context.route.path == '') ? 'home' : context.route.path
+import Article from '~/components/Article.vue'
 
-    // Load the JSON from the API - loadig the home content (index page)
+export default {
+  components: {
+    Article,
+  },
+  asyncData(context) {
+    // Load the JSON from the API
+    const version =
+      context.query._storyblok || context.isDev ? 'draft' : 'published'
+
     return context.app.$storyapi
-      .get('cdn/stories/home', {
-        version: 'draft',
+      .get(`cdn/stories/en/articles/${context.params.slug}`, {
+        version,
       })
       .then((res) => {
         return res.data
@@ -43,17 +42,6 @@ export default {
   data() {
     return {
       story: { content: {} },
-    }
-  },
-  async fetch(context) {
-    // Loading reference data - Articles in our case
-    if (context.store.state.articles.loaded !== '1') {
-      const articlesRefRes = await context.app.$storyapi.get(`cdn/stories/`, {
-        starts_with: 'articles/',
-        version: 'draft',
-      })
-      context.store.commit('articles/setArticles', articlesRefRes.data.stories)
-      context.store.commit('articles/setLoaded', '1')
     }
   },
   mounted() {
